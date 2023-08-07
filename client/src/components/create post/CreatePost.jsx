@@ -23,6 +23,7 @@ const CreatePost = () => {
         e.preventDefault();
         const newPost = {
             userId: user._id,
+            profilePicture: user.profilePicture,
             username: user.username,
             desc: desc.current.value,
         };
@@ -75,8 +76,6 @@ const CreatePost = () => {
                             accept=".png,.jpeg,.jpg"
                             onChange={(e) => setFile(e.target.files[0])}
                         />
-
-                        <TagRoundedIcon className="createPost-item" />
                     </div>
                         
                     <div>

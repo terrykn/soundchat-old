@@ -27,6 +27,7 @@
     align-items: center;
     position: sticky;
     margin-bottom: 1rem;
+    box-shadow: .2rem 0 .5rem rgba(26, 26, 26, 0.201);
 }
 
 /*.navbarContainer {

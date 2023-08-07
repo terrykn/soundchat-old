@@ -1,13 +1,59 @@
 import "./post.css";
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { useTheme } from "@mui/material";
 
-const Post = ({ post }) => {
-    // need to move everything from feed
-    <div></div>
+import { Box, Grid } from "@mui/material";
+import { Avatar } from "@mui/material";
+
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import LyricsRoundedIcon from '@mui/icons-material/LyricsRounded';
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); 
+};
+
+const Post = ({ postId, post }) => {
+    const theme = useTheme();
+    
+    return(
+        <div key={postId}>
+            <Box className="post-box" sx={{ backgroundColor: theme.palette.primary.main, marginBottom: "1rem" }}>
+                <Grid className="post-row" item xs={12}>
+                    <Avatar sx={{ width: 30, height: 30 }}>
+                        <img 
+                            src={post.profilePicture} 
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
+                    </Avatar>
+                <p style={{ marginLeft: ".6rem" }}>
+                        <strong>{post.username}</strong>: {post.desc}
+                </p>
+                </Grid>
+
+                <Grid className="post-row" item xs={12}>
+                <p style={{ marginTop: ".6rem", fontSize: ".9rem" }}>{formatDate(post.createdAt)}</p>
+                </Grid>
+
+                <Grid className="post-row" item xs={12} style={{ 
+                    backgroundImage: `url(${post.img})`,
+                    height: "12rem",
+                    width: "100%",
+                    backgroundSize: "cover",
+                    marginTop: ".6rem",             
+                    }}
+                />
+
+                <Grid className="post-row" item xs={12}>
+                    <FavoriteRoundedIcon className="post-item" />
+                    <LyricsRoundedIcon className="post-item" />
+                </Grid>
+            </Box>                            
+        </div>
+    );
 
 
     /*
@@ -71,6 +117,6 @@ const Post = ({ post }) => {
         </div>
         </div>
         */
-    );
+    
 }
 export default Post;

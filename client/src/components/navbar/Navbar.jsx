@@ -9,10 +9,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MailIcon from '@mui/icons-material/Mail';
 import PeopleIcon from '@mui/icons-material/People';
 
-import { AppBar, Box } from '@mui/material';
-import { Toolbar } from '@mui/material';
+import { Box } from '@mui/material';
 import { Avatar } from '@mui/material';
-
 import { useTheme } from '@mui/material/styles';
 
 const Navbar = () => {
@@ -38,7 +36,10 @@ const Navbar = () => {
                 <SignOutButton />
                 <a href="/profile/${user.username}" style={{ backgroundColor: theme.palette.primary.main }}>
                     <Avatar className="navbar-item" sx={{ width: 30, height: 30 }}>
-                        <img src={user.profilePicture} />
+                        <img 
+                            src={user.profilePicture} 
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
                     </Avatar>
                 </a>
             </div>
