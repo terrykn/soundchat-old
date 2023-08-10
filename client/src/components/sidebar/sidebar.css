@@ -8,6 +8,8 @@
     margin-top: .5rem;
     margin-bottom: .5rem;
     background-color: transparent;
+    align-items: center;
+    display: flex;
 }
 .sidebar-box{
     padding: .6rem;

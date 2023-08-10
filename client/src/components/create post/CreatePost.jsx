@@ -7,7 +7,6 @@ import { Avatar, Box, Button, Grid, TextField } from "@mui/material";
 
 import MicRoundedIcon from '@mui/icons-material/MicRounded';
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
-import TagRoundedIcon from '@mui/icons-material/TagRounded';
 import SendIcon from '@mui/icons-material/Send';
 
 import { useTheme } from '@mui/material/styles';
@@ -17,9 +16,11 @@ const CreatePost = () => {
     const {user} = useContext(AuthContext);
 
     const desc = useRef();
-    const [file, setFile] = useState(null);
 
-    const submitHandler = async (e) => {
+    const [file, setFile] = useState(null);
+    const [audio, setAudio] = useState(null);
+
+    const submitHandler = async(e) => {
         e.preventDefault();
         const newPost = {
             userId: user._id,
@@ -29,28 +30,46 @@ const CreatePost = () => {
         };
         if(file) {
             const data = new FormData();
-            const fileName = Date.now() + file.name;
-            data.append("name", fileName);
             data.append("file", file);
-            newPost.img = fileName;
-            console.log(newPost);
-            try {
-                await axios.post("/upload", data);
-            } 
-            catch(err) {}
+            try{
+                const response = await axios.post("/api/upload", data);
+                newPost.img = file.name;
+                newPost.imgFileName = response.data.filename;
+            }
+            catch(err){
+                console.error(err);
+            }
         }
-        try {
+        if(audio) {
+            const audioData = new FormData();
+            audioData.append("file", audio);
+            try {
+                const resp = await axios.post("/api/upload", audioData);
+                newPost.audio = audio.name;
+                newPost.audioFileName = resp.data.filename;
+            } 
+            catch(err){
+                console.error(err);
+            }
+        }
+        try{
             await axios.post("/api/posts", newPost);
             window.location.reload();
-        } 
-        catch(err) {}
+        }
+        catch(err){
+            console.error(err);
+        }
+
     };
 
     return (  
         <Box className="createPost-box" sx={{ backgroundColor: theme.palette.primary.main }}>
             <Grid className="createPost-row" item xs={12}>
                 <Avatar sx={{ width: 30, height: 30 }}>
-                    <img src={user.profilePicture} />
+                    <img 
+                        src={user.profilePicture} 
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
                 </Avatar>
                 <input 
                     ref={desc}
@@ -62,10 +81,21 @@ const CreatePost = () => {
             </Grid>
             <form onSubmit={submitHandler}>
                 <Grid className="createPost-row" item xs={12} sx={{ display: "flex", justifyContent: "space-between" }}>
+                    
                     <div>
-                        <MicRoundedIcon className="createPost-item" />
+                        <label htmlFor="audio" style={{ cursor: "pointer" }}>
+                            <MicRoundedIcon className="createPost-item" />
+                        </label>
 
+                        
+                        <input
+                            style={{ display: "none" }}
+                            type="file"
+                            id="audio"
+                            accept=".mp3,.wav" 
 
+                            onChange={(e) => setAudio(e.target.files[0])}
+                        />
                         <label htmlFor="file" style={{ cursor: "pointer" }}>
                             <AddPhotoAlternateRoundedIcon className="createPost-item" />
                         </label>
@@ -74,8 +104,14 @@ const CreatePost = () => {
                             type="file"
                             id="file"
                             accept=".png,.jpeg,.jpg"
+
                             onChange={(e) => setFile(e.target.files[0])}
                         />
+                    </div>
+                    
+
+                    <div>
+
                     </div>
                         
                     <div>

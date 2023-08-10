@@ -14,9 +14,18 @@ const PostSchema = new mongoose.Schema({
     },
     desc: {
         type: String,
-        max: 500,
+        max: 30,
     },
     img: {
+        type: String,
+    },
+    audio: {
+        type: String,
+    },
+    imgFileName: {
+        type: String,
+    },
+    audioFileName: {
         type: String,
     },
     likes: {

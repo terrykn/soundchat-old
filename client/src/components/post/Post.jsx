@@ -11,6 +11,8 @@ import { Avatar } from "@mui/material";
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import LyricsRoundedIcon from '@mui/icons-material/LyricsRounded';
 
+axios.defaults.baseURL = "http://localhost:8800";
+
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString(); 
@@ -18,11 +20,30 @@ const formatDate = (dateString) => {
 
 const Post = ({ postId, post }) => {
     const theme = useTheme();
+    const { user } = useContext(AuthContext);
+
+    const [like, setLike] = useState(post.likes.length);
+    const [isLiked, setIsLiked] = useState(false);
+
+    const likeHandler = () => {
+        try {
+            axios.put("api/posts/" + postId + "/like", { userId: user._id });
+        } 
+        catch(err) {}
+        setLike(isLiked ? like - 1 : like + 1);
+        setIsLiked(!isLiked);
+    };
+
+    useEffect(() => {
+        setIsLiked(post.likes.includes(user._id));
+    }, [post.userId, post.likes]);
     
     return(
+
         <div key={postId}>
             <Box className="post-box" sx={{ backgroundColor: theme.palette.primary.main, marginBottom: "1rem" }}>
                 <Grid className="post-row" item xs={12}>
+                    {/* make a link to profile later */}
                     <Avatar sx={{ width: 30, height: 30 }}>
                         <img 
                             src={post.profilePicture} 
@@ -35,11 +56,16 @@ const Post = ({ postId, post }) => {
                 </Grid>
 
                 <Grid className="post-row" item xs={12}>
-                <p style={{ marginTop: ".6rem", fontSize: ".9rem" }}>{formatDate(post.createdAt)}</p>
+                    <p style={{ marginTop: ".6rem", fontSize: ".9rem" }}>{formatDate(post.createdAt)}</p>
                 </Grid>
 
+                <p>post.img: {post.img}</p>
+                <p>post.imgFileName: {post.imgFileName}</p>
+                <img src={`/api/image/${post.imgFileName}`} />
+                <p>{`/api/image/${post.imgFileName}`}</p>
+
                 <Grid className="post-row" item xs={12} style={{ 
-                    backgroundImage: `url(${post.img})`,
+                    backgroundImage: `url(http://localhost:8800/api/image/${post.imgFileName})`,
                     height: "12rem",
                     width: "100%",
                     backgroundSize: "cover",
@@ -47,76 +73,14 @@ const Post = ({ postId, post }) => {
                     }}
                 />
 
-                <Grid className="post-row" item xs={12}>
-                    <FavoriteRoundedIcon className="post-item" />
-                    <LyricsRoundedIcon className="post-item" />
+                <Grid className="post-row" item xs={12} >
+                    <FavoriteRoundedIcon className="post-item" onClick={likeHandler} style={{ cursor: "pointer" }} />
+                    <p className="post-item" style={{ fontSize: "1rem" }}>{like} likes</p>
+                    <LyricsRoundedIcon className="post-item" style={{ cursor: "pointer" }}/>
+                    <p className="post-item" style={{ fontSize: "1rem" }}>{post.comment} comments</p>
                 </Grid>
             </Box>                            
         </div>
     );
-
-
-    /*
-    const [like, setLike] = useState(post.likes.length);
-    const [isLiked, setIsLiked] = useState(false);
-    const [user, setUser] = useState({});
-
-    const { user: currentUser } = useContext(AuthContext);
-
-    useEffect(() => {
-        setIsLiked(post.likes.includes(currentUser._id));
-    }, [currentUser._id, post.likes]);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-        const res = await axios.get(`/api/users?userId=${post.userId}`);
-        setUser(res.data);
-        };
-        fetchUser();
-    }, [post.userId]);
-
-    const likeHandler = () => {
-        try {
-        axios.put("/posts/" + post._id + "/like", { userId: currentUser._id });
-        } catch (err) {}
-        setLike(isLiked ? like - 1 : like + 1);
-        setIsLiked(!isLiked);
-    };
-    return (
-        <div className="post">
-        <div className="postWrapper">
-            <div className="postTop">
-            <div className="postTopLeft">
-                <Link to={`/api/profile/${user.username}`}>
-                <img
-                    className="postProfileImg"
-                    src={user.profilePicture}
-                    alt=""
-                />
-                </Link>
-                <span className="postUsername">{user.username}</span>
-                <span className="postDate">{post.createdAt}</span>
-            </div>
-            <div className="postTopRight">
-                <QuestionMarkIcon />
-            </div>
-            </div>
-            <div className="postCenter">
-            <span className="postText">{post?.desc}</span>
-            <img className="postImg" src={"/api/post/" + post.img} alt="" />
-            </div>
-            <div className="postBottom">
-            <div className="postBottomLeft">
-                <QuestionMarkIcon onclick={likeHandler} />
-                <span className="postLikeCounter">{like} people like it</span>
-            </div>
-            <div className="postBottomRight">
-                <span className="postCommentText">{post.comment} comments</span>
-            </div>
-            </div>
-        </div>
-        </div>
-        */
-    
 }
 export default Post;

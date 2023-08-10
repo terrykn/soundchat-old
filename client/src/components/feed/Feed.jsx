@@ -29,6 +29,7 @@ const Feed = ({ username }) => {
     }, []);
 
     return (
+        
         <Grid item xs={6} md={6}>
             <Grid item xs={6} md={6} style={{ marginBottom: "1rem"}}>
                 <CreatePost />
@@ -36,7 +37,13 @@ const Feed = ({ username }) => {
             <Grid item xs={6} md={6}>
                 <div>
                     {posts.map((post) => {
-                        return(<Post postId={post._id} post={post} />);
+                        return(
+                            <div>
+                                <Post postId={post._id} post={post} />
+                            </div>
+
+                            
+                        );
                     })}
                 </div>
             </Grid>

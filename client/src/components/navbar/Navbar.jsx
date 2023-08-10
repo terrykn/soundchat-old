@@ -14,7 +14,7 @@ import { Avatar } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 const Navbar = () => {
-    const {user} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const theme = useTheme();
     
     return(

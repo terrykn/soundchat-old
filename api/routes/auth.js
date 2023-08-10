@@ -11,7 +11,7 @@ router.post("/register", async(req, res) => {
 
         /* CREATE NEW USER */
         const newUser = new User({
-            username: req.body.username,
+            username: req.body.username.toLowerCase(),
             email: req.body.email,
             password: hashedPassword,
         });
@@ -27,11 +27,11 @@ router.post("/register", async(req, res) => {
 /* LOGIN */
 router.post("/login", async(req, res) => {
     try {
-        const user = await User.findOne({ username: req.body.username });
-        !user && res.status(404).json("USER NOT FOUND");
-
+        const user = await User.findOne({ username: req.body.username.toLowerCase() });
+        if(!user) return res.status(404).json("USER NOT FOUND");
+        
         const validPassword = await bcrypt.compare(req.body.password, user.password);
-        !validPassword && res.status(400).json("INCORRECT PASSWORD");
+        if(!validPassword) return res.status(400).json("INCORRECT PASSWORD");
 
         res.status(200).json(user)
     } catch(err) {
