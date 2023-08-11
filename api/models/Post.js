@@ -19,18 +19,12 @@ const PostSchema = new mongoose.Schema({
     img: {
         type: String,
     },
-    audio: {
-        type: String,
-    },
-    imgFileName: {
-        type: String,
-    },
-    audioFileName: {
-        type: String,
-    },
     likes: {
         type: Array,
         default: [],
+    },
+    img64: {
+        type: String,
     },
 }, { timestamps: true });
 

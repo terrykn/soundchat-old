@@ -59,20 +59,9 @@ const Post = ({ postId, post }) => {
                     <p style={{ marginTop: ".6rem", fontSize: ".9rem" }}>{formatDate(post.createdAt)}</p>
                 </Grid>
 
-                <p>post.img: {post.img}</p>
-                <p>post.imgFileName: {post.imgFileName}</p>
-                <img src={`/api/image/${post.imgFileName}`} />
-                <p>{`/api/image/${post.imgFileName}`}</p>
+                <img width="100%" height="100%" src={post.img64} />
 
-                <Grid className="post-row" item xs={12} style={{ 
-                    backgroundImage: `url(http://localhost:8800/api/image/${post.imgFileName})`,
-                    height: "12rem",
-                    width: "100%",
-                    backgroundSize: "cover",
-                    marginTop: ".6rem",             
-                    }}
-                />
-
+                
                 <Grid className="post-row" item xs={12} >
                     <FavoriteRoundedIcon className="post-item" onClick={likeHandler} style={{ cursor: "pointer" }} />
                     <p className="post-item" style={{ fontSize: "1rem" }}>{like} likes</p>
