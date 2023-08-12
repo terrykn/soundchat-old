@@ -26,6 +26,9 @@ const PostSchema = new mongoose.Schema({
     img64: {
         type: String,
     },
+    audio64:{
+        type: String,
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Post", PostSchema);

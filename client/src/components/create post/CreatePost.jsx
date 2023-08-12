@@ -5,29 +5,31 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { Avatar, Box, Button, Grid, TextField } from "@mui/material";
 
-import MicRoundedIcon from '@mui/icons-material/MicRounded';
 import AddPhotoAlternateRoundedIcon from '@mui/icons-material/AddPhotoAlternateRounded';
 import SendIcon from '@mui/icons-material/Send';
 
 import { useTheme } from '@mui/material/styles';
 import { Image } from "image-js";
+import AudioRecorder from "./AudioRecorder";
+
 
 const CreatePost = () => {
     const theme = useTheme();
-    const {user} = useContext(AuthContext);
-
+    const { user } = useContext(AuthContext);
     const desc = useRef();
+
     const [image, setImage] = useState("");
+    const [audio, setAudio] = useState("");
 
     const submitHandler = async(e) => {
         e.preventDefault();
-
         const newPost = {
             userId: user._id,
             profilePicture: user.profilePicture,
             username: user.username,
             desc: desc.current.value,
-            img64: image
+            img64: image,
+            audio64: audio,
         };
         try{
             await axios.post("/api/posts", newPost);
@@ -39,15 +41,18 @@ const CreatePost = () => {
     };
 
     function convertTo64(e){
-        console.log(e);
-        var reader = new FileReader();
-        reader.readAsDataURL(e.target.files[0]);
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
         reader.onload = () => {
-            setImage(reader.result);
+            if(file.type.startsWith("image")){
+                setImage(reader.result);
+            }
+            else if(file.type.startsWith("audio")){
+                setAudio(reader.result);
+            }
         };
-        reader.onerror = error => {
-            console.log("ERROR: ", error);
-        }
+        reader.readAsDataURL(file);
     }
 
     return (  
@@ -66,14 +71,12 @@ const CreatePost = () => {
                     placeholder="Post description... (max 30 characters)" 
                 />
             </Grid>
+
+            <AudioRecorder setAudio={setAudio}/>
             
             <form onSubmit={submitHandler}>
                 <Grid className="createPost-row" item xs={12} sx={{ display: "flex", justifyContent: "space-between" }}>
                     <div>
-                        <label htmlFor="audio" style={{ cursor: "pointer" }}>
-                            <MicRoundedIcon className="createPost-item" />
-                        </label>
-
                         <label htmlFor="file" style={{ cursor: "pointer" }}>
                             <AddPhotoAlternateRoundedIcon className="createPost-item" />
                         </label>
@@ -87,9 +90,9 @@ const CreatePost = () => {
                     </div>
                         
                     <div>
-                        <Button type="submit" className="createPost-item" style={{ color: "black", marginTop: ".2rem" }}>
+                        <button type="submit" className="createPost-item" style={{ border: "none", backgroundColor: "transparent", marginRight: ".5rem", marginTop: ".5rem", cursor: "pointer", display: "inline-flex", padding: 2 }}>
                             <SendIcon />
-                        </Button>
+                        </button>
                     </div>
                 </Grid>
 

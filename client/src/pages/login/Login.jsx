@@ -28,6 +28,13 @@ export default function Login() {
         );
     };
 
+    const handleGuestLogin = () => {
+        loginCall(
+            { username: "guest", password: "guest" },
+            dispatch
+        )
+    }
+
     return (
         <Grid container component="main" sx={{ height: '100vh '}}>
             <CssBaseline />
@@ -65,13 +72,27 @@ export default function Login() {
                                 {isFetching ? (<LinearProgress />):("Sign In")}
                         </Button>
 
-                        <Grid container>
+                        <Grid container style={{ marginTop: ".5rem" }}>
                             <Grid item xs>
                                 <a href="/register">Don't have an account yet?</a>
                             </Grid>
                         </Grid>
 
+                        <Grid container style={{ marginTop: ".5rem" }}>
+                            <Grid item xs>
+                                <button 
+                                    disabled={isFetching}
+                                    fullWidth variant="contained" 
+                                    sx={{ mt: 1, mb: 1, backgroundColor: '#00b300', '&:hover': {backgroundColor: '#009900'}}}
+                                    onClick={handleGuestLogin}
+                                    >
+                                        {isFetching ? (<LinearProgress />):("Try the site as a Guest?")}
+                                </button>
+                            </Grid>
+                        </Grid>
+
                     </Box>
+
                 </Box>
             </Grid>
         </Grid>

@@ -56,10 +56,12 @@ const Post = ({ postId, post }) => {
                 </Grid>
 
                 <Grid className="post-row" item xs={12}>
-                    <p style={{ marginTop: ".6rem", fontSize: ".9rem" }}>{formatDate(post.createdAt)}</p>
+                    <p style={{ marginTop: ".6rem", marginBottom: ".3rem", fontSize: ".9rem" }}>{formatDate(post.createdAt)}</p>
                 </Grid>
 
-                <img width="100%" height="100%" src={post.img64} />
+                
+                {post.img64 && (<img width="100%" height="100%" src={post.img64} />)}
+                {post.audio64 && (<audio src={post.audio64} controls="controls" style={{ width: "100%" }} />)}
 
                 
                 <Grid className="post-row" item xs={12} >

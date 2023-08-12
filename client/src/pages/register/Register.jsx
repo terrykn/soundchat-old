@@ -12,8 +12,13 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import LinearProgress from "@mui/material/LinearProgress";
 
 import { useTheme } from "@mui/material";
+
+import { loginCall } from "../../apiCalls";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 axios.defaults.baseURL = "http://localhost:8800";
 
@@ -23,6 +28,7 @@ const Register = () => {
     const password = useRef();
     const repeatPassword = useRef();
     const navigate = useNavigate();
+    const { isFetching, dispatch } = useContext(AuthContext);
 
     const theme = useTheme();
 
@@ -44,6 +50,13 @@ const Register = () => {
         }
         }
     };
+
+    const handleGuestLogin = () => {
+        loginCall(
+            { username: "guest", password: "guest" },
+            dispatch
+        )
+    }
 
     return (
         <Grid container component="main" sx={{ height: '100vh' }}>
@@ -86,6 +99,19 @@ const Register = () => {
                         <Grid container>
                             <Grid item xs>
                                 <a href="/login">Already have an account?</a>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container style={{ marginTop: ".5rem" }}>
+                            <Grid item xs>
+                                <button 
+                                    disabled={isFetching}
+                                    fullWidth variant="contained" 
+                                    sx={{ mt: 1, mb: 1, backgroundColor: '#00b300', '&:hover': {backgroundColor: '#009900'}}}
+                                    onClick={handleGuestLogin}
+                                    >
+                                        {isFetching ? (<LinearProgress />):("Try the site as a Guest?")}
+                                </button>
                             </Grid>
                         </Grid>
 
