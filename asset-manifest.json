@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/soundchat/static/css/main.7b6d215e.css",
+    "main.js": "/soundchat/static/js/main.0f239bb6.js",
+    "index.html": "/soundchat/index.html",
+    "main.7b6d215e.css.map": "/soundchat/static/css/main.7b6d215e.css.map",
+    "main.0f239bb6.js.map": "/soundchat/static/js/main.0f239bb6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7b6d215e.css",
+    "static/js/main.0f239bb6.js"
+  ]
+}
